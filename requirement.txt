@@ -1,2 +1,2 @@
-python3=3.8.10
-requests=2.32.3
+python3==3.8.10
+requests==2.32.3
