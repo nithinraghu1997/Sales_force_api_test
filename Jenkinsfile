@@ -10,7 +10,7 @@ pipeline {
         stage('Checkout') {
             steps {
                 // Checkout your repository containing main.py, database.py, etc.
-                git 'https://github.com/Ayansyd/sales_force_api.git'
+                git 'https://github.com/nithinraghu1997/sales_force_api.git'
             }
         }
         stage('Install Dependencies') {
