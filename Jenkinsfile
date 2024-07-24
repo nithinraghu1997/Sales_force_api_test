@@ -4,6 +4,9 @@ pipeline {
     environment {
         PYTHON_VERSION = '3.8.10'  // Specify the Python version you want to use
         VENV = 'myenv'            // Name of your virtual environment
+        DOCKER_REGISTRY = 'docker.io'
+        DOCKER_HUB_REPO = 'nithiniast/my-python-app'
+        DOCKER_IMAGE_TAG = '1'
     }
     
     stages {
@@ -18,13 +21,25 @@ pipeline {
                     sh '''pip install -r requirements.txt'''
             }
         }
-        stage('Execute Scripts') {
+        stage('Build and Push Docker Image') {
             steps {
-                // Run your Python scripts
-                    sh "python3 app.py"
-                
+                script {
+                    docker.withRegistry('https://docker.io', 'Docker access') {
+                        def dockerImage = docker.build("${DOCKER_HUB_REPO}:${DOCKER_IMAGE_TAG}")
+                        dockerImage.push()
+                    }
+                }
             }
         }
     }
-    
+
+    post {
+        always {
+            script {
+                docker.image("${DOCKER_HUB_REPO}:${DOCKER_IMAGE_TAG}").remove()
+            }
+        }
     }
+}
+
+                
