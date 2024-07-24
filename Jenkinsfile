@@ -14,19 +14,7 @@ pipeline {
                 // Checkout your repository containing main.py, database.py, etc.
                 git 'https://github.com/nithinraghu1997/sales_force_api.git'
             }
-        }
-        
-        stage('Setup Environment') {
-            steps {
-                // Install Python and create virtual environment
-                sh '''
-                    python3 -m venv ${VENV}
-                    source ${VENV}/bin/activate
-                    pip install -r requirements.txt
-                '''
-            }
-        }
-        
+        }   
         stage('Build Docker Image') {
             steps {
                 // Build Docker image
@@ -37,7 +25,7 @@ pipeline {
         stage('Push to Docker Registry') {
             steps {
                 // Push Docker image to registry
-                sh "docker login -u ${nithiniast} -p ${IAST@1234}"
+                sh "docker login -u ${DOCKER_REGISTRY_USERNAME} -p ${DOCKER_REGISTRY_PASSWORD}"
                 sh "docker push ${DOCKER_REGISTRY}/${IMAGE_NAME}:${BUILD_NUMBER}"
             }
         }
