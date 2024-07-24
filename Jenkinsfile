@@ -1,39 +1,43 @@
 pipeline {
     agent any
-
+    
     environment {
-        // Define Docker Hub credentials ID and Docker Hub repository
-        DOCKERHUB_CREDENTIALS = 'nithiniast'
-        DOCKERHUB_REPO = 'nithiniast/my-python-app'
-        DOCKER_IMAGE_TAG = '1'
+        VENV = 'myenv'                      // Name of your virtual environment
+        DOCKER_REGISTRY = 'nithiniast'  // Docker registry username or hostname
+        IMAGE_NAME = 'myapp'                // Docker image name
+        BUILD_NUMBER = '1'
     }
-
+    
     stages {
+        stage('Checkout') {
+            steps {
+                // Checkout your repository containing main.py, database.py, etc.
+                git 'https://github.com/nithinraghu1997/sales_force_api.git'
+            }
+        }
+        
+        stage('Setup Environment') {
+            steps {
+                // Install Python and create virtual environment
+                sh '''
+                    python3 -m venv ${VENV}
+                    source ${VENV}/bin/activate
+                    pip install -r requirements.txt
+                '''
+            }
+        }
+        
         stage('Build Docker Image') {
             steps {
-                script {
-                    // Build the Docker image
-                    sudo docker.build("${DOCKERHUB_REPO}:${DOCKER_IMAGE_TAG}")
-                }
+                // Build Docker image
+                sh "docker build -t ${DOCKER_REGISTRY}/${IMAGE_NAME}:${BUILD_NUMBER} ."
             }
         }
-
-        stage('Push Docker Image to Docker Hub') {
+        
+        stage('Push to Docker Registry') {
             steps {
-                script {
-                    // Push the Docker image to Docker Hub
-                   withDockerRegistry(credentialsId: 'Dockerhub', url: 'docker.io') {
-                        def dockerImage = docker.image("${DOCKERHUB_REPO}:${DOCKER_IMAGE_TAG}")
-                        dockerImage.push()
-                    }
-                }
+                // Push Docker image to registry
+                sh "docker login -u ${nithiniast} -p ${IAST@1234}"
+                sh "docker push ${DOCKER_REGISTRY}/${IMAGE_NAME}:${BUILD_NUMBER}"
             }
         }
-    }
-
-    post {
-        success {
-            echo "Docker image pushed successfully to ${DOCKERHUB_REPO}:${DOCKER_IMAGE_TAG}"
-        }
-    }
-}
