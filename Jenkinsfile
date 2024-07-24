@@ -24,7 +24,7 @@ pipeline {
         stage('Build and Push Docker Image') {
             steps {
                 script {
-                    docker.withRegistry('https://docker.io', 'Docker access') {
+                    docker.withRegistry('https://docker.io', 'Dockerhub') {
                         def dockerImage = docker.build("${DOCKER_HUB_REPO}:${DOCKER_IMAGE_TAG}")
                         dockerImage.push()
                     }
