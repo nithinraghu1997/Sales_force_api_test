@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         // Define Docker Hub credentials ID and Docker Hub repository
-        DOCKERHUB_CREDENTIALS = 'Docker access'
+        DOCKERHUB_CREDENTIALS = 'nithiniast'
         DOCKERHUB_REPO = 'nithiniast/my-python-app'
         DOCKER_IMAGE_TAG = '1'
     }
@@ -22,7 +22,7 @@ pipeline {
             steps {
                 script {
                     // Push the Docker image to Docker Hub
-                    docker.withRegistry('https://registry-1.docker.io/v1/', DOCKERHUB_CREDENTIALS) {
+                   withDockerRegistry(credentialsId: 'Dockerhub', url: 'docker.io') {
                         def dockerImage = docker.image("${DOCKERHUB_REPO}:${DOCKER_IMAGE_TAG}")
                         dockerImage.push()
                     }
