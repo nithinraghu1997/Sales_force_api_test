@@ -36,6 +36,15 @@ pipeline {
                 }
             }
         }
+        stage ('Docker deploy to Container') {
+            steps {
+                script {
+                    docker.withRegistry('', registryCredential){
+                    sh "docker run -d --name python -p 8070:8070 nithiniast/pythonapp" 
+                    }
+                }
+            }
+        }
     }
     
     }
