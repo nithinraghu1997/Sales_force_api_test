@@ -5,6 +5,7 @@ pipeline {
         PYTHON_VERSION = '3.8.10'  // Specify the Python version you want to use
         VENV = 'myenv'            // Name of your virtual environment
         registry = 'nithiniast/pythonapp'
+        registryCredential = 'dockerhub_id'
     }
     
     stages {
@@ -24,6 +25,15 @@ pipeline {
                 script {
                     dockerImage = docker.build registry
                 }                
+            }
+        }
+        stage ('Push to DockerHub') {
+            steps {
+                script {
+                    docker.withRegistry('', registryCredential){
+                    dockerImage.push()
+                    }
+                }
             }
         }
     }
