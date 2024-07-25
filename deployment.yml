@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: py-app-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: py-app
+  template:
+    metadata:
+      labels:
+        app: py-app
+    spec:
+      containers:
+        - name: pythontest
+          image: nithiniast/pythonapptest:latest
+          ports:
+            - containerPort: 8070  # Replace with your container's port
+          # Add additional configurations as needed (e.g., environment variables, volumes)
