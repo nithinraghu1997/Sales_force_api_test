@@ -4,6 +4,7 @@ pipeline {
     environment {
         PYTHON_VERSION = '3.8.10'  // Specify the Python version you want to use
         VENV = 'myenv'            // Name of your virtual environment
+        registry = 'nithiniast/pythonapp'
     }
     
     stages {
@@ -18,11 +19,11 @@ pipeline {
                     sh '''pip install -r requirements.txt'''
             }
         }
-        stage('Execute Scripts') {
+        stage('Build Docker Image') {
             steps {
-                // Run your Python scripts
-                    sh "python3 app.py"
-                
+                script {
+                    dockerImage = docker.build registry
+                }                
             }
         }
     }
