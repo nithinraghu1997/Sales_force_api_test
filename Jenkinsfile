@@ -23,15 +23,15 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
-                    dockerImage = docker.build registry
+                    sudo dockerImage = docker.build registry
                 }                
             }
         }
         stage ('Push to DockerHub') {
             steps {
                 script {
-                    docker.withRegistry('', registryCredential){
-                    dockerImage.push()
+                    sudo docker.withRegistry('', registryCredential){
+                    sudo dockerImage.push()
                     }
                 }
             }
@@ -39,8 +39,8 @@ pipeline {
         stage ('Docker deploy to Container') {
             steps {
                 script {
-                    docker.withRegistry('', registryCredential){
-                    sh "docker run -d --name pythontest -p 8070:5000 nithiniast/pythonapptest" 
+                    sudo docker.withRegistry('', registryCredential){
+                    sh "sudo docker run -d --name pythontest -p 8070:5000 nithiniast/pythonapptest" 
                     }
                 }
             }
