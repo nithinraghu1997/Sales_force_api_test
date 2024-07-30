@@ -27,6 +27,24 @@ pipeline {
                 }                
             }
         }
+        stage ('Push to DockerHub') {
+            steps {
+                script {
+                    docker.withRegistry('', registryCredential){
+                    dockerImage.push()
+                    }
+                }
+            }
+        }
+        stage ('Docker deploy to Container') {
+            steps {
+                script {
+                    docker.withRegistry('', registryCredential){
+                    sh "docker run -d --name pythontest -p 8070:5000 nithiniast/pythonapptest" 
+                    }
+                }
+            }
+        }
     }
     
     }
