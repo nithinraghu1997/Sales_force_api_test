@@ -4,7 +4,7 @@ pipeline {
     environment {
         PYTHON_VERSION = '3.8.10'  // Specify the Python version you want to use
         VENV = 'myenv'            // Name of your virtual environment
-        registry = 'nithiniast/pythonapptest3'
+        registry = 'nithiniast/pythonapptest'
         registryCredential = 'dockerhub_id'
     }
     
@@ -40,7 +40,7 @@ pipeline {
             steps {
                 script {
                     docker.withRegistry('', registryCredential){
-                    sh "docker run -d --name pythontest -p 8070:5000 nithiniast/pythonapptest3" 
+                    sh "docker run -d --name pythontest1 -p 8070:5000 nithiniast/pythonapptest" 
                     }
                 }
             }
