@@ -4,7 +4,7 @@ pipeline {
     environment {
         PYTHON_VERSION = '3.8.10'  // Specify the Python version you want to use
         VENV = 'myenv'            // Name of your virtual environment
-        registry = 'nithiniast/pythonapptest2'
+        registry = 'nithiniast/pythonapptest3'
         registryCredential = 'dockerhub_id'
     }
     
